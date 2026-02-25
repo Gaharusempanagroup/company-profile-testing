@@ -5,10 +5,13 @@
             <div data-aos="fade-right">
                 <div class="section-label" style="color:var(--gold);">
                     <span style="background:var(--gold);"></span>
-                    Hubungi Kami
+                    <span data-id="Hubungi Kami" data-en="Contact Us">Hubungi Kami</span>
                 </div>
-                <h2 class="section-title" style="color:var(--white);">Siap Membantu <span style="background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Proyek Anda</span></h2>
-                <p class="section-subtitle" style="color:rgba(255,255,255,0.6);">
+                <h2 class="section-title" style="color:var(--white);">
+                    <span data-id="Siap Membantu " data-en="Ready to Help with ">Siap Membantu </span>
+                    <span style="background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-id="Proyek Anda" data-en="Your Project">Proyek Anda</span>
+                </h2>
+                <p class="section-subtitle" style="color:rgba(255,255,255,0.6);" data-id="Konsultasikan kebutuhan perencanaan dan pengawasan konstruksi Anda bersama tim profesional kami." data-en="Discuss your planning and construction supervision needs with our professional team.">
                     Konsultasikan kebutuhan perencanaan dan pengawasan konstruksi Anda bersama tim profesional kami.
                 </p>
 
@@ -16,14 +19,14 @@
                     <div class="kontak-item">
                         <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
                         <div class="info">
-                            <div class="label">Alamat Kantor</div>
+                            <div class="label" data-id="Alamat Kantor" data-en="Office Address">Alamat Kantor</div>
                             <div class="value">Jl. Batusari No. 15, Kel. Dangin Puri Kelod,<br>Kec. Denpasar Timur, Kota Denpasar, Bali</div>
                         </div>
                     </div>
                     <div class="kontak-item">
                         <div class="icon"><i class="fas fa-phone"></i></div>
                         <div class="info">
-                            <div class="label">Nomor Telepon</div>
+                            <div class="label" data-id="Nomor Telepon" data-en="Phone Number">Nomor Telepon</div>
                             <div class="value">(0361) 241613 &nbsp;|&nbsp; (0361) 241676</div>
                         </div>
                     </div>
@@ -38,8 +41,8 @@
                     <div class="kontak-item">
                         <div class="icon"><i class="fas fa-clock"></i></div>
                         <div class="info">
-                            <div class="label">Jam Kerja</div>
-                            <div class="value">Senin – Jumat: 08.00 – 17.00 WITA</div>
+                            <div class="label" data-id="Jam Kerja" data-en="Working Hours">Jam Kerja</div>
+                            <div class="value" data-id="Senin – Jumat: 08.00 – 17.00 WITA" data-en="Monday – Friday: 08:00 – 17:00 WITA">Senin – Jumat: 08.00 – 17.00 WITA</div>
                         </div>
                     </div>
                 </div>
@@ -51,13 +54,13 @@
                     <a href="mailto:gaharusempanagroup@gmail.com" class="social-btn" title="Email">
                         <i class="fas fa-envelope"></i>
                     </a>
-                    <a href="tel:036124161" class="social-btn" title="Telepon">
+                    <a href="tel:+6281239066460" class="social-btn" title="Telepon">
                         <i class="fas fa-phone"></i>
                     </a>
-                    <a href="https://wa.me/62361241613" target="_blank" class="social-btn" title="WhatsApp">
+                    <a href="https://wa.me/6281239066460" target="_blank" class="social-btn" title="WhatsApp">
                         <i class="fab fa-whatsapp"></i>
                     </a>
-                    <a href="https://maps.google.com/?q=Jl.+Batusari+No.+15,+Dangin+Puri+Kelod,+Denpasar+Timur,+Kota+Denpasar,+Bali" target="_blank" class="social-btn social-btn-maps" title="Lihat di Google Maps">
+                    <a href="https://maps.app.goo.gl/FpVwDiPYoQxyaDiA6" target="_blank" class="social-btn social-btn-maps" title="Lihat di Google Maps">
                         <i class="fas fa-map-marker-alt"></i>
                     </a>
                 </div>
@@ -66,7 +69,7 @@
             <!-- Form -->
             <div data-aos="fade-left">
                 <div class="kontak-form-wrap">
-                    <h3 class="form-title">Kirim Pesan</h3>
+                    <h3 class="form-title" data-id="Kirim Pesan" data-en="Send Message">Kirim Pesan</h3>
 
                     @if(session('success'))
                     <div class="alert-success">
@@ -79,8 +82,8 @@
                         @csrf
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="name">Nama Lengkap <span style="color:var(--gold);">*</span></label>
-                                <input type="text" id="name" name="name" placeholder="Nama Anda" value="{{ old('name') }}" required>
+                                <label for="name"><span data-id="Nama Lengkap" data-en="Full Name">Nama Lengkap</span> <span style="color:var(--gold);">*</span></label>
+                                <input type="text" id="name" name="name" data-placeholder-id="Nama Anda" data-placeholder-en="Your Name" placeholder="Nama Anda" value="{{ old('name') }}" required>
                                 @error('name') <span style="color:#f87171;font-size:12px;">{{ $message }}</span> @enderror
                             </div>
                             <div class="form-group">
@@ -90,17 +93,17 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="subject">Subjek <span style="color:var(--gold);">*</span></label>
-                            <input type="text" id="subject" name="subject" placeholder="Subjek pesan Anda" value="{{ old('subject') }}" required>
+                            <label for="subject"><span data-id="Subjek" data-en="Subject">Subjek</span> <span style="color:var(--gold);">*</span></label>
+                            <input type="text" id="subject" name="subject" data-placeholder-id="Subjek pesan Anda" data-placeholder-en="Your message subject" placeholder="Subjek pesan Anda" value="{{ old('subject') }}" required>
                             @error('subject') <span style="color:#f87171;font-size:12px;">{{ $message }}</span> @enderror
                         </div>
                         <div class="form-group">
-                            <label for="message">Pesan <span style="color:var(--gold);">*</span></label>
-                            <textarea id="message" name="message" rows="5" placeholder="Tuliskan pesan, pertanyaan, atau kebutuhan proyek Anda..." required>{{ old('message') }}</textarea>
+                            <label for="message"><span data-id="Pesan" data-en="Message">Pesan</span> <span style="color:var(--gold);">*</span></label>
+                            <textarea id="message" name="message" rows="5" data-placeholder-id="Tuliskan pesan, pertanyaan, atau kebutuhan proyek Anda..." data-placeholder-en="Write your message, questions, or project needs..." placeholder="Tuliskan pesan, pertanyaan, atau kebutuhan proyek Anda..." required>{{ old('message') }}</textarea>
                             @error('message') <span style="color:#f87171;font-size:12px;">{{ $message }}</span> @enderror
                         </div>
                         <button type="submit" class="btn btn-primary form-submit">
-                            <i class="fas fa-paper-plane"></i> Kirim Pesan
+                            <i class="fas fa-paper-plane"></i> <span data-id="Kirim Pesan" data-en="Send Message">Kirim Pesan</span>
                         </button>
                     </form>
                 </div>

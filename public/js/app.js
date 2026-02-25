@@ -1,44 +1,33 @@
-// ========== COMPANY SWITCHER ==========
-let currentCompany = 'gsg';
+// ========== LANGUAGE SWITCHER ==========
+let currentLang = localStorage.getItem('lang') || 'id';
 
-function switchCompany(company) {
-    currentCompany = company;
+function switchLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('lang', lang);
 
     // Update switcher buttons
-    document.querySelectorAll('.switcher-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.company === company);
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
     });
 
-    // Animate sections
-    const sections = ['tentang', 'portfolio'];
-    sections.forEach(section => {
-        const active = document.getElementById(`${section}-${company}`);
-        const other  = document.getElementById(`${section}-${company === 'gsg' ? 'kak' : 'gsg'}`);
-        if (other) {
-            other.style.opacity = '0';
-            setTimeout(() => {
-                other.classList.remove('active');
-                if (active) {
-                    active.classList.add('active');
-                    requestAnimationFrame(() => { active.style.opacity = '1'; });
-                }
-            }, 250);
+    // Update all elements with data-id / data-en attributes
+    document.querySelectorAll('[data-id], [data-en]').forEach(el => {
+        const text = lang === 'en' ? el.dataset.en : el.dataset.id;
+        if (text !== undefined) {
+            el.textContent = text;
         }
     });
 
-    // Update hero badge
-    const badge = document.getElementById('hero-company-label');
-    if (badge) {
-        badge.textContent = company === 'gsg'
-            ? 'PT. Gaharu Sempana · Est. 1994'
-            : 'PT. Kencana Adhi Karma · Est. 1988';
-    }
+    // Update placeholders for inputs/textareas (data-placeholder-id / data-placeholder-en)
+    document.querySelectorAll('[data-placeholder-id], [data-placeholder-en]').forEach(el => {
+        const ph = lang === 'en' ? el.dataset.placeholderEn : el.dataset.placeholderId;
+        if (ph !== undefined) {
+            el.placeholder = ph;
+        }
+    });
 
-    // Reset portfolio filter to 'all'
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    const allBtn = document.querySelector('.filter-btn[data-filter="all"]');
-    if (allBtn) allBtn.classList.add('active');
-    filterPortfolio('all');
+    // Update portfolio filter data-category mapping if needed
+    // (filter buttons already have data-id/data-en attributes handled above)
 }
 
 // ========== NAVBAR SCROLL EFFECT ==========
@@ -52,7 +41,7 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 // ========== MOBILE MENU ==========
-const navToggle  = document.getElementById('navToggle');
+const navToggle = document.getElementById('navToggle');
 const mobileMenu = document.getElementById('mobileMenu');
 
 navToggle.addEventListener('click', () => {
@@ -70,41 +59,105 @@ document.querySelectorAll('.mobile-nav-link').forEach(link => {
 
 // ========== SMOOTH SCROLL ==========
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
+    anchor.addEventListener('click', function (e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
             const navHeight = navbar.offsetHeight + 20;
-            const offset    = target.getBoundingClientRect().top + window.scrollY - navHeight;
+            const offset = target.getBoundingClientRect().top + window.scrollY - navHeight;
             window.scrollTo({ top: offset, behavior: 'smooth' });
         }
     });
 });
 
-// ========== PORTFOLIO FILTER ==========
-function filterPortfolio(filter) {
-    const activeGrid = document.getElementById(`pfGrid-${currentCompany}`);
-    if (!activeGrid) return;
+// ========== PORTFOLIO SWIPER ==========
+let portfolioSwiper;
+let allPortfolioSlides = []; // Saved once on init
 
-    const items = activeGrid.querySelectorAll('.portfolio-item');
-    items.forEach((item, i) => {
-        const cat = item.dataset.category;
-        const show = filter === 'all' || cat === filter;
-        item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-        if (show) {
-            item.style.opacity   = '1';
-            item.style.transform = 'scale(1)';
-            item.style.display   = '';
-        } else {
-            item.style.opacity   = '0';
-            item.style.transform = 'scale(0.95)';
-            setTimeout(() => { if (!show) item.style.display = 'none'; }, 300);
+function initPortfolioSwiper() {
+    portfolioSwiper = new Swiper('.portfolio-swiper', {
+        slidesPerView: 1,
+        grid: {
+            rows: 2,
+            fill: 'row'
+        },
+        spaceBetween: 20,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        autoplay: {
+            delay: 4000,
+            disableOnInteraction: false,
+        },
+        breakpoints: {
+            640: {
+                slidesPerView: 2,
+                grid: { rows: 2 }
+            },
+            1024: {
+                slidesPerView: 3,
+                grid: { rows: 2 }
+            }
         }
     });
 }
 
+
+let isFiltering = false; // guard against rapid clicks
+
+function filterPortfolio(filter) {
+    if (isFiltering) return;
+    const wrapper = document.getElementById('pfGrid');
+    const swiperEl = document.querySelector('.portfolio-swiper');
+    if (!wrapper || !swiperEl) return;
+
+    isFiltering = true;
+
+    // --- FADE OUT ---
+    swiperEl.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+    swiperEl.style.opacity = '0';
+    swiperEl.style.transform = 'scale(0.97)';
+
+    setTimeout(() => {
+        // Destroy Swiper
+        if (portfolioSwiper) {
+            portfolioSwiper.destroy(true, true);
+            portfolioSwiper = null;
+        }
+
+        // Rebuild wrapper with filtered slides
+        while (wrapper.firstChild) wrapper.removeChild(wrapper.firstChild);
+
+        const slidesToShow = filter === 'all'
+            ? allPortfolioSlides
+            : allPortfolioSlides.filter(slide => {
+                const item = slide.querySelector('.portfolio-item');
+                return item && item.dataset.category === filter;
+            });
+
+        slidesToShow.forEach(slide => wrapper.appendChild(slide));
+
+        // Reinit Swiper
+        initPortfolioSwiper();
+
+        // --- FADE IN ---
+        // Let browser paint the new layout first
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                swiperEl.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+                swiperEl.style.opacity = '1';
+                swiperEl.style.transform = 'scale(1)';
+                isFiltering = false;
+            });
+        });
+    }, 260); // wait for fade-out to finish
+}
+
+
+
 document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
+    btn.addEventListener('click', function () {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         filterPortfolio(this.dataset.filter);
@@ -129,26 +182,51 @@ document.addEventListener('DOMContentLoaded', () => {
         easing: 'ease-out-cubic',
     });
 
+    initPortfolioSwiper();
+
+    // Save all slides ONCE after Swiper is initialized
+    const wrapper = document.getElementById('pfGrid');
+    if (wrapper) {
+        allPortfolioSlides = Array.from(wrapper.querySelectorAll('.swiper-slide'));
+    }
+
     // Init company sections
     document.querySelectorAll('.company-section').forEach(el => {
         el.style.transition = 'opacity 0.4s ease';
     });
+
+    // Apply saved language preference on load
+    switchLang(currentLang);
 });
 
-// ========== ACTIVE NAV LINK ON SCROLL (Intersection Observer) ==========
+// ========== ACTIVE NAV LINK ON SCROLL (scroll-position based) ==========
 const sections = document.querySelectorAll('section[id]');
-const navLinks  = document.querySelectorAll('.navbar-menu a');
+const navLinks = document.querySelectorAll('.navbar-menu a');
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            navLinks.forEach(link => {
-                link.style.color = link.getAttribute('href') === `#${entry.target.id}`
-                    ? 'var(--gold-light)'
-                    : '';
-            });
-        }
+function updateActiveNav() {
+    const scrollPos = window.scrollY + navbar.offsetHeight + 40;
+    const atBottom = (window.scrollY + window.innerHeight) >= (document.body.offsetHeight - 10);
+
+    let current = '';
+
+    if (atBottom) {
+        // At bottom of page — force last section active
+        current = sections[sections.length - 1].id;
+    } else {
+        sections.forEach(section => {
+            if (section.offsetTop <= scrollPos) {
+                current = section.id;
+            }
+        });
+    }
+
+    navLinks.forEach(link => {
+        link.style.color = link.getAttribute('href') === `#${current}`
+            ? 'var(--gold-light)'
+            : '';
     });
-}, { threshold: 0.35 });
+}
 
-sections.forEach(s => observer.observe(s));
+window.addEventListener('scroll', updateActiveNav, { passive: true });
+// Run once on load
+updateActiveNav();

@@ -277,8 +277,8 @@ body {
     gap: 12px;
 }
 
-/* Company Switcher */
-.company-switcher {
+/* Language Switcher */
+.lang-switcher {
     display: flex;
     align-items: center;
     background: rgba(255, 255, 255, 0.1);
@@ -288,23 +288,29 @@ body {
     gap: 2px;
 }
 
-.switcher-btn {
-    padding: 6px 16px;
+.lang-btn {
+    padding: 6px 14px;
     font-size: 12px;
     font-weight: 700;
     border-radius: 50px;
     border: none;
     cursor: pointer;
     transition: var(--transition);
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.75);
     background: transparent;
     letter-spacing: 0.3px;
+    white-space: nowrap;
 }
 
-.switcher-btn.active {
+.lang-btn.active {
     background: linear-gradient(135deg, var(--gold), var(--gold-light));
     color: var(--dark);
     box-shadow: 0 2px 12px rgba(201, 168, 76, 0.4);
+}
+
+.lang-btn:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--white);
 }
 
 /* Mobile Toggle */
@@ -367,18 +373,18 @@ body {
     background: rgba(255, 255, 255, 0.08);
 }
 
-.mobile-company-switch {
+.mobile-lang-switch {
     display: flex;
     gap: 8px;
     padding: 10px 16px;
     margin-top: 8px;
 }
 
-.mobile-company-switch .switcher-btn {
+.mobile-lang-switch .lang-btn {
     flex: 1;
     text-align: center;
     padding: 8px 12px;
-    font-size: 11px;
+    font-size: 12px;
 }
 
 /* ====================== HERO ====================== */
@@ -397,7 +403,6 @@ body {
     background-size: cover;
     background-position: center;
     transform: scale(1.05);
-    transition: transform 8s ease;
 }
 
 .hero-bg::after {
@@ -548,19 +553,18 @@ body {
 .tentang-image-wrap {
     position: relative;
     border-radius: var(--radius-lg);
-    overflow: hidden;
-    aspect-ratio: 4/3;
 }
 
 .tentang-image-wrap img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    object-fit: contain;
     transition: transform 0.6s ease;
+    transform: scaleX(-1);
 }
 
 .tentang-image-wrap:hover img {
-    transform: scale(1.04);
+    transform: scale(-1.04, 1.04);
 }
 
 .tentang-badge-float {
@@ -602,6 +606,101 @@ body {
 }
 
 
+
+/* Subsidiary Company Cards */
+.subsidiary-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 28px;
+    margin-bottom: 28px;
+}
+
+.subsidiary-card {
+    background: var(--light);
+    border: 1px solid rgba(0, 53, 128, 0.1);
+    border-radius: var(--radius-md);
+    padding: 18px 16px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    transition: var(--transition);
+}
+
+.subsidiary-card:hover {
+    border-color: var(--gold);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-2px);
+}
+
+.subsidiary-logo-wrap {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 6px;
+    border: 1px solid rgba(0, 53, 128, 0.08);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 68px;
+}
+
+.subsidiary-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.subsidiary-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.subsidiary-name {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 6px;
+    line-height: 1.3;
+}
+
+.subsidiary-meta {
+    margin-bottom: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.meta-pill-sm {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    font-size: 11px;
+    gap: 5px;
+    width: fit-content;
+}
+
+.subsidiary-desc {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.5;
+    margin-bottom: 6px;
+}
+
+.subsidiary-director {
+    font-size: 11px;
+    color: var(--text-light);
+    font-style: italic;
+    line-height: 1.4;
+}
+
+.subsidiary-director .dir-title {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--primary);
+}
 
 .values-grid {
     display: grid;
@@ -657,10 +756,11 @@ body {
     gap: 12px;
     margin-top: 28px;
     margin-bottom: 32px;
+    align-items: flex-start;
 }
 
 .meta-pill {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 8px;
     padding: 8px 16px;
@@ -670,6 +770,7 @@ body {
     font-size: 13px;
     font-weight: 600;
     color: var(--primary);
+    width: fit-content;
 }
 
 .meta-pill i {
@@ -851,30 +952,39 @@ body {
     color: var(--dark);
 }
 
-.portfolio-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+.portfolio-swiper {
+    width: 100%;
+    padding-bottom: 50px;
+    /* Space for pagination */
+}
+
+.portfolio-swiper .swiper-slide {
+    height: calc((100% - 20px) / 2);
+    /* Forces 2 rows via Swiper grid */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .portfolio-item {
     position: relative;
     border-radius: var(--radius-md);
     overflow: hidden;
-    aspect-ratio: 4/3;
     cursor: pointer;
     transition: var(--transition);
+    width: 100%;
+    aspect-ratio: 4/3;
 }
 
-.portfolio-item:first-child {
-    grid-column: span 2;
-    aspect-ratio: 2/1;
+.portfolio-item.with-image {
+    background: var(--dark-mid);
 }
 
 .portfolio-bg {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     transition: transform 0.5s ease;
 }
 
@@ -917,16 +1027,49 @@ body {
 }
 
 .portfolio-title {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     color: var(--white);
     margin-bottom: 6px;
+    line-height: 1.2;
 }
 
 .portfolio-desc {
-    font-size: 13px;
+    font-size: 12px;
     color: rgba(255, 255, 255, 0.75);
-    line-height: 1.5;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+}
+
+.portfolio-swiper {
+    position: relative;
+    padding-bottom: 40px;
+    /* Space for pagination */
+}
+
+/* Base bullet style */
+.swiper-pagination-bullet {
+    background: rgba(255, 255, 255, 0.4);
+    opacity: 1;
+    width: 10px;
+    height: 10px;
+    margin: 0 6px !important;
+    transition: all 0.3s ease;
+}
+
+/* Active bullet styling */
+.swiper-pagination-bullet-active {
+    background: var(--gold);
+    transform: scale(1.3);
+}
+
+/* Swiper Pagination Container adjustments */
+.swiper-pagination-clickable .swiper-pagination-bullet {
+    cursor: pointer;
 }
 
 /* Portfolio color placeholders */
@@ -1046,6 +1189,14 @@ body {
     font-size: 22px;
     color: var(--primary);
     margin-bottom: 6px;
+}
+
+.mitra-logo-img {
+    display: block;
+    max-height: 48px;
+    width: auto;
+    margin: 0 auto 6px auto;
+    object-fit: contain;
 }
 
 /* ====================== KONTAK ====================== */
@@ -1260,6 +1411,14 @@ footer {
     color: var(--gold);
 }
 
+.mobile-only {
+    display: none;
+}
+
+.desktop-only {
+    display: block;
+}
+
 /* ====================== RESPONSIVE ====================== */
 @media (max-width: 1100px) {
     .layanan-grid {
@@ -1268,9 +1427,54 @@ footer {
 }
 
 @media (max-width: 900px) {
+    .mobile-only {
+        display: block;
+    }
+
+    .desktop-only {
+        display: none;
+    }
+
     .tentang-grid {
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 0;
+    }
+
+    .tentang-image-wrap {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .tentang-image-wrap img {
+        max-height: 400px;
+        object-fit: contain;
+    }
+
+    .tentang-badge-float {
+        bottom: 15px;
+        left: 15px;
+        padding: 10px 15px;
+        gap: 8px;
+    }
+
+    .tentang-badge-float .icon {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+
+    .tentang-badge-float .info .num {
+        font-size: 16px;
+    }
+
+    .tentang-badge-float .info .label {
+        font-size: 9px;
+    }
+
+    .tentang-grid>div:nth-child(2) {
+        margin-top: 10px;
+        position: relative;
+        z-index: 2;
     }
 
     .hero-stats {
@@ -1324,6 +1528,14 @@ footer {
         grid-template-columns: 1fr;
     }
 
+    .subsidiary-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .lang-switcher {
+        display: none;
+    }
+
     .form-row {
         grid-template-columns: 1fr;
     }
@@ -1367,4 +1579,296 @@ footer {
 .company-section.active {
     display: block;
     opacity: 1;
+}
+
+/* Subsidiary logo fallback */
+.subsidiary-logo-fallback {
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 22px;
+}
+
+
+/* Director Caption below photo */
+.director-caption {
+    margin-top: 16px;
+    text-align: center;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, rgba(0, 53, 128, 0.05), rgba(201, 168, 76, 0.08));
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(0, 53, 128, 0.1);
+}
+
+.director-caption-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.4;
+    margin-bottom: 4px;
+}
+
+.director-caption-title {
+    font-size: 11px;
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Badge variant for director name */
+.tentang-badge-float--name {
+    max-width: 280px;
+}
+
+.tentang-badge-float--name .num {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    line-height: 1.3;
+    color: var(--white);
+}
+
+/* Gold label for director name badge */
+.tentang-badge-float--name .label {
+    color: var(--gold-light);
+}
+
+/* Force gold color for label inside name badge variant */
+.tentang-badge-float.tentang-badge-float--name .info .label {
+    color: var(--gold-light) !important;
+}
+
+
+/* ====================== VISI & MISI ====================== */
+.visi-misi-section {
+    position: relative;
+    padding: 100px 0;
+    overflow: hidden;
+}
+
+.visi-misi-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+            var(--dark) 0%,
+            var(--primary-dark) 50%,
+            var(--dark-mid) 100%);
+}
+
+.visi-misi-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 20% 50%, rgba(201, 168, 76, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 53, 128, 0.3) 0%, transparent 50%);
+}
+
+.text-gradient-gold {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.visi-misi-header {
+    text-align: center;
+    margin-bottom: 64px;
+}
+
+.visi-misi-header .section-label::before {
+    background: var(--gold-light);
+}
+
+.visi-misi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 40px;
+    align-items: start;
+}
+
+/* --- VISI card --- */
+.visi-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(201, 168, 76, 0.25);
+    border-radius: var(--radius-lg);
+    padding: 40px 36px;
+    position: relative;
+    overflow: hidden;
+}
+
+.visi-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+}
+
+/* --- MISI card --- */
+.misi-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    padding: 40px 36px;
+}
+
+/* --- Shared card elements --- */
+.vm-card-icon {
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: var(--dark);
+    margin-bottom: 20px;
+}
+
+.vm-card-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.vm-card-text {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.85;
+    font-style: italic;
+}
+
+/* --- Misi list --- */
+.misi-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.misi-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.misi-list li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.misi-num {
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--gold);
+    opacity: 0.5;
+    line-height: 1;
+    flex-shrink: 0;
+    min-width: 36px;
+}
+
+.misi-text {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.75;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .visi-misi-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* === Misi list alignment & hover animation === */
+
+/* Fix alignment: number top-aligned with first line of text */
+.misi-list li {
+    transition: background 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+    border-radius: var(--radius-sm);
+    padding: 12px 14px 14px 14px;
+    border-left: 3px solid transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    margin: 0 -14px;
+}
+
+.misi-list li:last-child {
+    border-bottom: none;
+}
+
+.misi-list li:hover {
+    background: rgba(201, 168, 76, 0.08);
+    border-left-color: var(--gold);
+    transform: translateX(6px);
+}
+
+/* Align number with first text line */
+.misi-num {
+    padding-top: 2px;
+    align-self: flex-start;
+}
+
+/* Make text not shrink */
+.misi-text {
+    flex: 1;
+}
+
+/* Hover animation for Visi card */
+.visi-card {
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.visi-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--gold);
+    box-shadow: 0 16px 48px rgba(201, 168, 76, 0.2);
+}
+
+.visi-card:hover .vm-card-icon {
+    transform: scale(1.1) rotate(-5deg);
+    box-shadow: 0 8px 24px rgba(201, 168, 76, 0.35);
+}
+
+.vm-card-icon {
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* Hover animation for Misi card — same as Visi */
+.misi-card {
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.misi-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--gold);
+    box-shadow: 0 16px 48px rgba(201, 168, 76, 0.2);
+}
+
+.misi-card:hover .vm-card-icon {
+    transform: scale(1.1) rotate(-5deg);
+    box-shadow: 0 8px 24px rgba(201, 168, 76, 0.35);
+}
+
+/* logo-sub sizing — matches GAHARU SEMPANA GROUP width */
+.logo-sub {
+    font-size: 12.5px !important;
+    letter-spacing: 0.8px !important;
+    text-align: left !important;
+    text-align-last: left !important;
+    -webkit-text-align-last: left !important;
+    width: auto !important;
 }

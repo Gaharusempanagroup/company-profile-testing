@@ -3,15 +3,17 @@
 @section('title', 'Gaharu Sempana Group - Konsultan Perencana & Pengawas')
 
 @section('content')
-    @include('partials.navbar', ['companies' => $companies])
+    @include('partials.navbar', ['group' => $group])
 
-    @include('partials.hero', ['companies' => $companies])
+    @include('partials.hero', ['group' => $group])
 
-    @include('partials.tentang', ['companies' => $companies])
+    @include('partials.tentang', ['group' => $group])
+
+    @include('partials.visi-misi')
 
     @include('partials.layanan')
 
-    @include('partials.portfolio', ['companies' => $companies])
+    @include('partials.portfolio', ['portfolio' => $portfolio])
 
     @include('partials.mitra')
 
@@ -22,11 +24,11 @@
             <div class="footer-inner">
                 <p class="footer-copy">&copy; {{ date('Y') }} Gaharu Sempana Group. All rights reserved.</p>
                 <div class="footer-links">
-                    <a href="#hero">Beranda</a>
-                    <a href="#tentang">Tentang Kami</a>
-                    <a href="#layanan">Layanan</a>
-                    <a href="#portfolio">Portofolio</a>
-                    <a href="#kontak">Kontak</a>
+                    <a href="#hero" data-id="Beranda" data-en="Home">Beranda</a>
+                    <a href="#tentang" data-id="Tentang Kami" data-en="About Us">Tentang Kami</a>
+                    <a href="#layanan" data-id="Layanan" data-en="Services">Layanan</a>
+                    <a href="#portfolio" data-id="Karya" data-en="Portfolio">Karya</a>
+                    <a href="#kontak" data-id="Kontak" data-en="Contact">Kontak</a>
                 </div>
             </div>
         </div>
